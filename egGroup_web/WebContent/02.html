@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <title>Hello, world!</title>
+
+<style>
+
+h2{float:left; width:100%; color:#fff; margin-bottom:40px; font-size: 14px; position:relartive; z-index:3; margin-top:30px}
+h2 span{font-family: 'Libre Baskerville', serif; display:block; font-size:45px; text-transform:none; margin-bottom:20px; margin-top:30px; font-weight:700}
+h2 a{color:#fff; font-weight:bold;}
+
+body{
+/*background: -webkit-linear-gradient(to bottom, #514A9D, #24C6DC);   Chrome 10-25, Safari 5.1-6 */
+/*background: linear-gradient(to bottom, #514A9D, #24C6DC);  W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+/* .head{float:left;width:100%; height:100%; font-family: "微軟正黑體";} */
+
+.search-box{width:auto; margin:auto; box-shadow:20px 20px 0 rgba(0,0,0,0.2); font-family: "微軟正黑體";}
+.listing-block{background:#fff;  overflow-y:scroll;font-family: "微軟正黑體";}
+.media {background:#fff; position:relative; margin-bottom:15px; font-family: "微軟正黑體";}
+.media img{width:200px;margin:0; height:136px;}
+/*.media-body{border:1px solid #bcbcbc; border-left:0; height:136px;}*/
+.media .price{float:left; width:100%; font-size:30px;font-weight:600; color:#4765AB; font-family: "微軟正黑體";}
+.media .price small{display:block; font-size:17px; color:#232323;font-family: "微軟正黑體";}
+.media .stats{float:left; width:100%; margin-top:10px; font-family: "微軟正黑體";}
+.media .stats span{float:left; margin-right:10px; font-size:15px;font-family: "微軟正黑體";}
+.media .stats span i{margin-right:7px; color:#4765AB;font-family: "微軟正黑體";}
+.media .address{float:left; width:100%;font-size:14px; margin-top:5px; color:#888;font-family: "微軟正黑體";}
+.media .fav-box{position:absolute; right:10px; font-size:20px; top:4px; color:#E74C3C;font-family: "微軟正黑體";}
+
+.map-box{
+background-color:#A3CCFF;
+}
+
+.navbar {
+  background-color: #ea771b;  font-family: "微軟正黑體";
+}
+.navbar .navbar-brand {
+  color: #603514;
+}
+.navbar .navbar-brand:hover,
+.navbar .navbar-brand:focus {
+  color: #4e237e;
+}
+.navbar .navbar-text {
+  color: #603514;
+}
+.navbar .navbar-text a {
+  color: #4e237e;
+}
+.navbar .navbar-text a:hover,
+.navbar .navbar-text a:focus {
+  color: #4e237e; 
+}
+.navbar .navbar-nav .nav-link {
+  color: #603514;
+  border-radius: .25rem;
+  margin: 0 0.25em;
+}
+.navbar .navbar-nav .nav-link:not(.disabled):hover,
+.navbar .navbar-nav .nav-link:not(.disabled):focus {
+  color: #fff;
+}
+
+.navbar .navbar-nav .nav-item .nav-link{
+  position: relative;
+}
+
+.navbar .navbar-nav .nav-item .nav-link::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background-color: #3cefff;
+  transform-origin: center;
+  transform: translateX(-50%) scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.navbar .navbar-nav .nav-item .nav-link::before {
+  top: 90%;
+}
+
+.navbar .navbar-nav .nav-item .nav-link::after {
+  bottom: 0%;
+}
+
+.navbar .navbar-nav .nav-item .nav-link:hover::before, span:hover::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+
+.listing-block{
+z-index: 1;
+position: absolute;
+height: 100%;
+width: 40%;
+padding: 0px;
+border-width: 0px;
+margin: 0px;
+left: 0px;
+op: 0px;
+ouch-action: pan-x pan-y;;
+}
+.map-box{
+z-index: 3;
+position: absolute;
+height: 100%; width: 60%;
+padding: 0px;
+border-width: 0px;
+margin: 0px;
+left:40%;
+top: 56px;
+touch-action: pan-x pan-y;
+}
+
+
+</style>
+
+  </head>
+
+
+
+  <body>
+
+  <!-- Navigation 上方NAVBAR -->
+ <nav class="navbar navbar-expand-lg navbar-default bg-default " >
+
+    <div class="container">
+    
+      <a class="navbar-brand" href="#">Back To EGG</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">會員
+ 
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">好友</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">餐廳</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">飯局</a>
+          </li>
+         
+        </ul>
+
+      </div>
+    </div>
+  </nav>
+
+
+
+      <div class="listing-block">
+         <div class="media">
+            <div class="fav-box"><i class="fa fa-heart-o" aria-hidden="true"></i>           
+            </div>
+              <img class="d-flex align-self-start" src="https://picsum.photos/500/500" alt="Generic placeholder image">
+              <div class="media-body pl-3">
+                <div class="price">日式燒肉
+                  <small>評分:<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></small>
+                  
+                </div>
+                <div class="stats">
+                    <span><i class="fa fa-arrows-alt"></i>桃園中壢</span>
+                    <span><i class="fa fa-bath"></i>03-55555555</span>
+                </div>
+                <div class="address" ><a href="#">點我進入餐廳貼文</a>
+                </div>
+              </div>
+            </div>
+        <div class="media">
+            <div class="fav-box"><i class="fa fa-heart-o" aria-hidden="true"></i>
+</div>
+              <img class="d-flex align-self-start" src="https://picsum.photos/500/500" alt="Generic placeholder image">
+              <div class="media-body pl-3">
+                <div class="price">$506,400<small>New York</small></div>
+                <div class="stats">
+                    <span><i class="fa fa-arrows-alt"></i>1678 Sq ft</span>
+                    <span><i class="fa fa-bath"></i>2 Beadrooms</span>
+                </div>
+                <div class="address">4062 Walnut Hill Drive
+            Cincinnati</div>
+              </div>
+            </div>
+        <div class="media">
+            <div class="fav-box"><i class="fa fa-heart-o" aria-hidden="true"></i>
+</div>
+              <img class="d-flex align-self-start" src="https://picsum.photos/500/500" alt="Generic placeholder image">
+              <div class="media-body pl-3">
+                <div class="price">$506,400<small>New York</small></div>
+                <div class="stats">
+                    <span><i class="fa fa-arrows-alt"></i>1678 Sq ft</span>
+                    <span><i class="fa fa-bath"></i>2 Beadrooms</span>
+                </div>
+                <div class="address">4062 Walnut Hill Drive
+            Cincinnati</div>
+              </div>
+            </div>
+        <div class="media">
+            <div class="fav-box"><i class="fa fa-heart-o" aria-hidden="true"></i>
+</div>
+              <img class="d-flex align-self-start" src="https://picsum.photos/500/500" alt="Generic placeholder image">
+              <div class="media-body pl-3">
+                <div class="price">$799,000<small>New York</small></div>
+                <div class="stats">
+                    <span><i class="fa fa-arrows-alt"></i>1678 Sq ft</span>
+                    <span><i class="fa fa-bath"></i>2 Beadrooms</span>
+                </div>
+                <div class="address">4062 Walnut Hill Drive
+            Cincinnati</div>
+              </div>
+            </div>
+        <div class="media">
+            <div class="fav-box"><i class="fa fa-heart-o" aria-hidden="true"></i>
+              </div>
+              <img class="d-flex align-self-start" src="https://picsum.photos/500/500" alt="Generic placeholder image">
+              <div class="media-body pl-3">
+                <div class="price">$506,400<small>New York</small></div>
+                <div class="stats">
+                    <span><i class="fa fa-arrows-alt"></i>1678 Sq ft</span>
+                    <span><i class="fa fa-bath"></i>2 Beadrooms</span>
+                </div>
+                <div class="address">4062 Walnut Hill Drive
+            Cincinnati</div>
+              </div>
+            </div>
+          <div class="media">
+            <div class="fav-box"><i class="fa fa-heart-o" aria-hidden="true"></i>
+              </div>
+              <img class="d-flex align-self-start" src="https://picsum.photos/500/500" alt="Generic placeholder image">
+              <div class="media-body pl-3">
+                <div class="price">$506,400<small>New York</small></div>
+                <div class="stats">
+                    <span><i class="fa fa-arrows-alt"></i>1678 Sq ft</span>
+                    <span><i class="fa fa-bath"></i>2 Beadrooms</span>
+                </div>
+                <div class="address">4062 Walnut Hill Drive
+            Cincinnati</div>
+              </div>
+            </div>
+                      <ul class="pagination justify-content-center">
+              <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                  <span class="sr-only">Previous</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#">1</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#">2</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#">3</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </li>
+            </ul>
+
+  
+    </div>
+    <!--Google map -->
+
+<!--     <div class="container-fluid">
+      <div class="row"> -->
+    <div class="map-box">
+        <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.co.uk/maps?f=q&source=s_q&hl=en&geocode=&815&sspn=23.047000,121.666992&ie=UTF8&hq=&hnear=15+Springfield+Way,+Hythe+CT21+5SH,+United+Kingdom&t=m&z=14&ll=23.077429,121.121722&output=embed"
+        style="z-index:2;">
+        </iframe>
+      </div>
+
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  </body>
+</html>

@@ -1,0 +1,760 @@
+DROP TABLE MESSAGE;
+DROP TABLE FRIENDLIST;
+DROP SEQUENCE MESSAGE_seq;
+
+DROP TABLE REPORTLM;
+DROP TABLE REPORTPOST;
+DROP TABLE LEAVEMESSAGE;
+DROP TABLE POST;
+
+DROP TABLE ORD_DETAILS;
+DROP TABLE ORD;
+
+DROP TABLE FOODITEM;  
+DROP TABLE PointTransaction;
+
+
+DROP TABLE FEASTTRACK;
+DROP TABLE REPORT_FEAST;
+DROP TABLE MYFEAST;
+DROP TABLE FEASTINFO;
+
+
+DROP TABLE RESTAURANTAC;
+DROP TABLE AD;
+
+DROP TABLE RESTAURANT;
+
+DROP TABLE MEM;
+
+--//先創建一對多中 一的表格 在建立多的表格 刪除的時候要相反 不然會GG
+DROP TABLE adminPower;
+DROP TABLE adminFunction;
+DROP TABLE administrator;
+
+
+
+DROP SEQUENCE admin_seq;
+DROP SEQUENCE adminFunction_seq;
+
+
+DROP SEQUENCE POST_seq;
+DROP SEQUENCE LEAVEMESSAGE_seq;
+DROP SEQUENCE REPORTLM_seq;
+DROP SEQUENCE REPORTPOST_seq;
+DROP SEQUENCE mem_seq;
+
+DROP SEQUENCE FOODITEM_seq;
+DROP SEQUENCE PointTransaction_seq;
+
+DROP SEQUENCE ad_seq; --廣告編號
+DROP SEQUENCE ord_seq; --訂餐單編號
+DROP SEQUENCE res_seq; --餐廳編號
+
+DROP SEQUENCE FEASTINFO_SEQ;
+DROP SEQUENCE REPORT_FEAST_SEQ;
+
+
+
+--------------------------------------
+--會員
+--------------------------------------
+
+CREATE TABLE mem
+(
+  MEM_NO     VARCHAR2(8)  NOT NULL, 
+  MEM_NAME   VARCHAR2(15) NOT NULL, 
+  MEM_ADRS   VARCHAR2(100) , 
+  MEM_SEX    VARCHAR2(6)  , 
+  MEM_BD     DATE , 
+  MEM_PH     VARCHAR2(10) NOT NULL,
+  MEM_EMAIL  VARCHAR2(50) ,
+  MEM_POINT  NUMBER(10,0) NOT NULL,
+  MEM_IMG    BLOB,
+  MEM_PASS   VARCHAR2(20) NOT NULL,
+  MEM_AC     VARCHAR2(10) NOT NULL unique,
+  MEM_INTRO  VARCHAR2(600),
+  MEM_STATUS VARCHAR2(10) NOT NULL,
+  CONSTRAINT mem_PK PRIMARY KEY (MEM_NO)
+);
+
+CREATE SEQUENCE mem_seq
+INCREMENT BY 1
+START WITH 1
+NOMAXVALUE
+NOCYCLE
+NOCACHE;
+
+Insert into mem (MEM_NO, MEM_NAME, MEM_ADRS, MEM_SEX, MEM_BD, MEM_PH, MEM_EMAIL,MEM_POINT, MEM_IMG, MEM_PASS, MEM_AC,MEM_INTRO,MEM_STATUS) values 
+('ME'||LPAD(to_char(mem_seq.NEXTVAL),6, '0'),'王','桃園市中壢區自強一路398號','男性',TO_DATE('2015-11-17','YYYY-MM-DD'),'0912345678','a12346@gmail.com','0',NULL,'111','01','嗨!大家好我是王大明,我住在桃園中壢,歡迎大家一起來吃飯喔!','mem2');
+Insert into mem (MEM_NO, MEM_NAME, MEM_ADRS, MEM_SEX, MEM_BD, MEM_PH, MEM_EMAIL,MEM_POINT, MEM_IMG, MEM_PASS, MEM_AC,MEM_INTRO,MEM_STATUS) values 
+('ME'||LPAD(to_char(mem_seq.NEXTVAL),6, '0'),'Frank','桃園市觀音區中山路400號','男性',TO_DATE('1995-05-07','YYYY-MM-DD'),'0933448887','b12346@gmail.com','50',NULL,'222','02','嗨!大家好我是法蘭克,我住在桃園觀音,可以一起來爬枕頭山喔!啾咪<3','mem1');
+Insert into mem (MEM_NO, MEM_NAME, MEM_ADRS, MEM_SEX, MEM_BD, MEM_PH, MEM_EMAIL,MEM_POINT, MEM_IMG, MEM_PASS, MEM_AC,MEM_INTRO,MEM_STATUS) values 
+('ME'||LPAD(to_char(mem_seq.NEXTVAL),6, '0'),'志玲','台北市信義區信義路五段7號','女性',TO_DATE('1974-11-29','YYYY-MM-DD'),'0933448887','c12346@gmail.com','1000',NULL,'333','03','林志玲是臺灣女藝人，身兼模特兒、主持人、演員、歌手等身分。出生於臺北市，畢業於加拿大多倫多大學西方美術史、經濟學雙主修學士學位。 林志玲2004年開始在華人圈迅速竄紅，風靡大街小巷，帶起一股「林志玲熱」，讓模特兒不再局限於平面、走秀，開始紛紛跨足影視娛樂產業。','mem2');
+Insert into mem (MEM_NO, MEM_NAME, MEM_ADRS, MEM_SEX, MEM_BD, MEM_PH, MEM_EMAIL,MEM_POINT, MEM_IMG, MEM_PASS, MEM_AC,MEM_INTRO,MEM_STATUS) values 
+('ME'||LPAD(to_char(mem_seq.NEXTVAL),6, '0'),'王美','台北市中山區中山路177號','女性',TO_DATE('1990-06-17','YYYY-MM-DD'),'0912358746','d12346@gmail.com','99',NULL,'444','04','美麗美麗,找不出其他的方式形容妳,別的話不準確一百萬個字句都不夠','mem2');
+Insert into mem (MEM_NO, MEM_NAME, MEM_ADRS, MEM_SEX, MEM_BD, MEM_PH, MEM_EMAIL,MEM_POINT, MEM_IMG, MEM_PASS, MEM_AC,MEM_INTRO,MEM_STATUS) values 
+('ME'||LPAD(to_char(mem_seq.NEXTVAL),6, '0'),'謝佾伸','桃園市平鎮區育達路160號附近','男性',TO_DATE('1989-05-17','YYYY-MM-DD'),'0987878787','e12346@gmail.com','30',NULL,'555','05','大家好我是佾伸,我最喜歡上睡覺,下課打咚咚了,希望和大家一起做朋友喔~','mem2');
+
+
+--
+--
+--
+--
+
+----------------------------------------------------------------
+-- for Table RESTAURANT
+----------------------------------------------------------------
+CREATE TABLE RESTAURANT (
+    RES_NO VARCHAR2(8) NOT NULL,
+    RES_ADRS VARCHAR2(100) NOT NULL,
+    RES_NAME VARCHAR2(100) NOT NULL,
+    RES_PH VARCHAR2(10) NOT NULL,
+    RES_POINT NUMBER(10,0),
+    RES_AC VARCHAR2(20) NOT NULL UNIQUE,
+    RES_PASS VARCHAR2(20) NOT NULL,
+    RES_IMG BLOB,
+    RES_INTRO VARCHAR2(100),
+    RES_START VARCHAR2(50) NOT NULL,
+    RES_END   VARCHAR2(50) NOT NULL,
+    RES_LAT	NUMBER(11,8),
+    RES_LOT	NUMBER(11,8),
+    RES_SCORE NUMBER(7, 0),
+    RES_COST	NUMBER(2, 0),
+    RES_COMCOUNT NUMBER(10,0),
+    RES_TYPE VARCHAR2(50),
+    RES_STATUS VARCHAR2(10) NOT NULL,
+    CONSTRAINT RESTAURANT_PK PRIMARY KEY(RES_NO),
+    CONSTRAINT RESTAURANT_UNIQUE UNIQUE (RES_ADRS, RES_NAME)
+);
+
+CREATE SEQUENCE res_seq
+INCREMENT BY 1
+START WITH 1
+NOMAXVALUE
+NOCYCLE
+NOCACHE;
+
+--insert太長惹 我折一下
+Insert into RESTAURANT (RES_NO,RES_ADRS,RES_NAME,RES_PH,RES_POINT,RES_AC,RES_PASS,RES_IMG,RES_INTRO,RES_START,RES_END,RES_LAT,RES_LOT,RES_SCORE,RES_COST,RES_COMCOUNT,RES_TYPE,RES_STATUS)
+values ('RS'||LPAD(to_char(res_seq.NEXTVAL), 6, '0'),'台灣桃園市中壢區中美路二段182號','熾天下燒肉吃到飽','03-1234567',0,'AC00001','123456',NULL,'燒肉吃起來','1100','2300',24.96,121.21,390,5,100,'吃到飽','res1');
+
+Insert into RESTAURANT (RES_NO,RES_ADRS,RES_NAME,RES_PH,RES_POINT,RES_AC,RES_PASS,RES_IMG,RES_INTRO,RES_START,RES_END,RES_LAT,RES_LOT,RES_SCORE,RES_COST,RES_COMCOUNT,RES_TYPE,RES_STATUS)
+values ('RS'||LPAD(to_char(res_seq.NEXTVAL), 6, '0'),'台灣桃園市中壢區嘉善街10號','廣一素食 90元吃到飽！！','03-2234567',0,'AC00002','123456',NULL,'今天也要吃菜ㄛ','1100','2300',24.94,121.23,440,1,100,'吃到飽','res2');
+
+Insert into RESTAURANT (RES_NO,RES_ADRS,RES_NAME,RES_PH,RES_POINT,RES_AC,RES_PASS,RES_IMG,RES_INTRO,RES_START,RES_END,RES_LAT,RES_LOT,RES_SCORE,RES_COST,RES_COMCOUNT,RES_TYPE,RES_STATUS)
+values ('RS'||LPAD(to_char(res_seq.NEXTVAL), 6, '0'),'台灣桃園市中壢區中壢區中美路31號','風太日式燒肉屋','03-3234567',0,'AC00003','123456',NULL,'燒肉吃起來again','1100','2300',24.95,121.22,370,2,100,'吃到飽','res3');
+
+Insert into RESTAURANT (RES_NO,RES_ADRS,RES_NAME,RES_PH,RES_POINT,RES_AC,RES_PASS,RES_IMG,RES_INTRO,RES_START,RES_END,RES_LAT,RES_LOT,RES_SCORE,RES_COST,RES_COMCOUNT,RES_TYPE,RES_STATUS)
+values ('RS'||LPAD(to_char(res_seq.NEXTVAL), 6, '0'),'台灣桃園市中壢區中美路二段152號','川王府麻辣火鍋','03-4234567',0,'AC00004','123456',NULL,'吳神最愛不好吃砍頭(X','1100','2300',24.95,121.22,400,3,100,'吃到飽','res4');
+
+Insert into RESTAURANT (RES_NO,RES_ADRS,RES_NAME,RES_PH,RES_POINT,RES_AC,RES_PASS,RES_IMG,RES_INTRO,RES_START,RES_END,RES_LAT,RES_LOT,RES_SCORE,RES_COST,RES_COMCOUNT,RES_TYPE,RES_STATUS)
+values ('RS'||LPAD(to_char(res_seq.NEXTVAL), 6, '0'),'台灣桃園市中壢區中央東路50號','本燔野菜農場','03-5234567',0,'AC00005','123456',NULL,'中壢最好吃壽喜燒','1100','2300',24.95,121.22,420,4,100,'吃到飽','res3');
+
+----------------------------------------------------------------
+-- for Table AD
+----------------------------------------------------------------
+CREATE TABLE AD (
+    AD_NO VARCHAR2(8) Not null,
+    AD_RESNO VARCHAR2(8),
+    AD_TEXT	VARCHAR2(600) Not null,
+    AD_IMG BLOB,
+    AD_START timestamp Not null,
+    AD_END timestamp Not null,
+    AD_TITLE VARCHAR2(30) Not null,
+    AD_STATUS VARCHAR2(10) Not null,
+    CONSTRAINT AD_PK PRIMARY KEY (AD_NO),
+    CONSTRAINT AD_FK FOREIGN KEY (AD_RESNO) REFERENCES RESTAURANT(RES_NO)
+);
+
+CREATE SEQUENCE ad_seq
+INCREMENT BY 1
+START WITH 1
+NOMAXVALUE
+NOCYCLE
+NOCACHE;
+
+Insert into AD (AD_NO,AD_RESNO,AD_TEXT,AD_IMG,AD_START,AD_END,AD_TITLE,AD_STATUS)
+values ('AD'||LPAD(to_char(ad_seq.NEXTVAL), 6, '0'),'RS000001','燒肉吃到飽壽星打折打到骨折',Null,TO_DATE('2019-06-16','YYYY-MM-DD'),TO_DATE('2019-06-20','YYYY-MM-DD'),'壽星打折','ads3');
+
+Insert into AD (AD_NO,AD_RESNO,AD_TEXT,AD_IMG,AD_START,AD_END,AD_TITLE,AD_STATUS)
+values ('AD'||LPAD(to_char(ad_seq.NEXTVAL), 6, '0'),'RS000002','謝師宴優惠，滿20人以上打九折',Null,TO_DATE('2019-06-01','YYYY-MM-DD'),TO_DATE('2019-07-01','YYYY-MM-DD'),'謝師宴優惠','ads2');
+
+Insert into AD (AD_NO,AD_RESNO,AD_TEXT,AD_IMG,AD_START,AD_END,AD_TITLE,AD_STATUS)
+values ('AD'||LPAD(to_char(ad_seq.NEXTVAL), 6, '0'),'RS000003','燒肉吃起來+100送日本和牛',Null,TO_DATE('2019-08-01','YYYY-MM-DD'),TO_DATE('2019-08-10','YYYY-MM-DD'),'+100送和牛','ads1');
+
+Insert into AD (AD_NO,AD_RESNO,AD_TEXT,AD_IMG,AD_START,AD_END,AD_TITLE,AD_STATUS)
+values ('AD'||LPAD(to_char(ad_seq.NEXTVAL), 6, '0'),'RS000004','慶祝同志可合法結婚，凡同志伴侶憑身分證享優惠現折100',Null,TO_DATE('2019-05-24','YYYY-MM-DD'),TO_DATE('2019-06-30','YYYY-MM-DD'),'慶祝同志合法結婚','ads2');
+
+Insert into AD (AD_NO,AD_RESNO,AD_TEXT,AD_IMG,AD_START,AD_END,AD_TITLE,AD_STATUS)
+values ('AD'||LPAD(to_char(ad_seq.NEXTVAL), 6, '0'),'RS000005','出示社群網站有加入韓總粉專者可免費升級吃到飽高級方案',Null,TO_DATE('2019-06-16','YYYY-MM-DD'),TO_DATE('2020-06-20','YYYY-MM-DD'),'韓粉發大財','ads3');
+
+----------------------------------------------------------------
+-- for Table RESTAURANTAC
+----------------------------------------------------------------
+CREATE TABLE RESTAURANTAC(
+    RESAC_NO VARCHAR2(6) Not null ,
+    RESAC_RESNO	VARCHAR2(8) Not null ,
+    RESAC_PASS VARCHAR2(20)	Not null ,
+    RESAC_NAME VARCHAR2(20)	Not null ,
+    RESAC_PHONE	VARCHAR2(12) Not null ,
+    RESAC_PIC BLOB Not null ,
+    RESAC_INTRO	VARCHAR2(600),	
+    RESAC_STATUS VARCHAR2(10) Not null, 
+    CONSTRAINT RESTAURANTAC_FK FOREIGN KEY (RESAC_RESNO) REFERENCES RESTAURANT (RES_NO),
+    CONSTRAINT RESTAURANTAC_PK PRIMARY KEY (RESAC_NO,RESAC_RESNO)
+);
+
+--員工編號不自增主鍵 由餐廳老闆自鍵
+
+INSERT INTO RESTAURANTAC (RESAC_NO, RESAC_RESNO, RESAC_PASS, RESAC_NAME, RESAC_PHONE,RESAC_PIC,RESAC_INTRO,RESAC_STATUS) 
+VALUES ('000001', 'RS000001', '123456', '大衛海鮮', '0955-123-456', empty_blob(),Null, 'resac1');
+
+INSERT INTO RESTAURANTAC (RESAC_NO, RESAC_RESNO, RESAC_PASS, RESAC_NAME, RESAC_PHONE,RESAC_PIC,RESAC_INTRO,RESAC_STATUS) 
+VALUES ('000002', 'RS000001', '123456', '大吳', '0955-223-456', empty_blob(),Null, 'resac2');
+
+INSERT INTO RESTAURANTAC (RESAC_NO, RESAC_RESNO, RESAC_PASS, RESAC_NAME, RESAC_PHONE,RESAC_PIC,RESAC_INTRO,RESAC_STATUS) 
+VALUES ('000001', 'RS000002', '123456', 'seafood', '0955-323-456', empty_blob(),Null, 'resac3');
+
+INSERT INTO RESTAURANTAC (RESAC_NO, RESAC_RESNO, RESAC_PASS, RESAC_NAME, RESAC_PHONE,RESAC_PIC,RESAC_INTRO,RESAC_STATUS) 
+VALUES ('000001', 'RS000003', '123456', '小潘', '0955-423-456', empty_blob(),Null, 'resac1');
+
+INSERT INTO RESTAURANTAC (RESAC_NO, RESAC_RESNO, RESAC_PASS, RESAC_NAME, RESAC_PHONE,RESAC_PIC,RESAC_INTRO,RESAC_STATUS) 
+VALUES ('000001', 'RS000004', '123456', '大郭', '0955-523-456', empty_blob(),Null, 'resac2');
+
+--
+--
+--
+--
+
+CREATE TABLE FOODITEM
+(
+  FO_NO      VARCHAR2(8)    NOT NULL, 
+  FO_RESNO   VARCHAR2(8)    NOT NULL, 
+  FO_NAME    VARCHAR2(60)   NOT NULL,
+  FO_PRICE   NUMBER(10,0)   NOT NULL,
+  FO_IMG     BLOB,
+  FO_INTRO   VARCHAR2(600),
+  FO_STATUS  VARCHAR2(10)   NOT NULL,
+  CONSTRAINT FOODITEM_PK PRIMARY KEY (FO_NO),
+  FOREIGN KEY (FO_RESNO) REFERENCES RESTAURANT (RES_NO)
+);
+
+CREATE SEQUENCE FOODITEM_seq
+INCREMENT BY 1
+START WITH 1
+NOMAXVALUE
+NOCYCLE
+NOCACHE;
+--建假資料
+
+Insert into FOODITEM (FO_NO, FO_RESNO, FO_NAME, FO_PRICE,FO_IMG,FO_INTRO,FO_STATUS) values ('FO'||LPAD(to_char(FOODITEM_seq.NEXTVAL), 6, '0'),'RS000001','昇龍餃子','130',NULL,'用蝦肉做餡，用蝦殼雕刻成龍頭獎，利用兩種不同的餃子皮，小麥和燕麥皮，加熱後由於膨脹度不同使餃子形成立體感，打開蒸籠的一剎那，給人以震撼的視覺效果。','fo1');
+Insert into FOODITEM (FO_NO, FO_RESNO, FO_NAME, FO_PRICE,FO_IMG,FO_INTRO,FO_STATUS) values ('FO'||LPAD(to_char(FOODITEM_seq.NEXTVAL), 6, '0'),'RS000002','大熊貓魔術麻婆豆腐','230',NULL,'魔幻麻婆豆腐中的『六味一體』是指由辣椒所現的辣為第一味，第二味是蒜苗的味道一香，第三是由辣椒的『紅』、豆腐的『白』及蒜苗的『白』所形成的色，第四是熱所散發的燙，第五是小山椒辣的舌頭髮麻，最後第六味是用大豆做成的絞肉，拿去炸所呈現的酥','fo1');
+Insert into FOODITEM (FO_NO, FO_RESNO, FO_NAME, FO_PRICE,FO_IMG,FO_INTRO,FO_STATUS) values ('FO'||LPAD(to_char(FOODITEM_seq.NEXTVAL), 6, '0'),'RS000003','大宇宙燒麥','500',NULL,'取豬肉的腿肉、裡脊肉、肩肉、豬頭皮、蹄花、胃袋、腰子等部份作為大燒賣的材料，其中先將肉質韌的部份加以敲打後，再加熱，激發出肉質本身所擁有的鮮味。','fo1');
+Insert into FOODITEM (FO_NO, FO_RESNO, FO_NAME, FO_PRICE,FO_IMG,FO_INTRO,FO_STATUS) values ('FO'||LPAD(to_char(FOODITEM_seq.NEXTVAL), 6, '0'),'RS000004','彗星炒飯','30',NULL,'普通的蔬菜什錦炒飯。','fo2');
+Insert into FOODITEM (FO_NO, FO_RESNO, FO_NAME, FO_PRICE,FO_IMG,FO_INTRO,FO_STATUS) values ('FO'||LPAD(to_char(FOODITEM_seq.NEXTVAL), 6, '0'),'RS000005','烈冰鮮鯛山','250',NULL,'將極薄的真鯛生魚片附在山狀冰塊上，配以特殊沾醬食用，由於冰塊的低溫保持了真鯛的美味，當真鯛在口腔中溶化後彷彿能感受到春天中生命復甦般天堂的感覺。','fo2');
+
+
+
+
+
+
+CREATE SEQUENCE PointTransaction_seq
+INCREMENT BY 1
+START WITH 1
+NOMAXVALUE
+NOCYCLE
+NOCACHE;
+ 
+  
+  CREATE TABLE PointTransaction
+  (
+      PT_NO     VARCHAR2(8)  NOT NULL, 
+      PT_MEMNO  VARCHAR2(8),
+      PT_RESNO  VARCHAR2(8),
+      PT_NT     NUMBER(10,0), 
+      CONSTRAINT PointTransaction_PK PRIMARY KEY (PT_NO),
+      FOREIGN KEY (PT_MEMNO) REFERENCES MEM(MEM_NO),
+      FOREIGN KEY (PT_RESNO) REFERENCES RESTAURANT (RES_NO)
+);  
+
+Insert into PointTransaction (PT_NO, PT_MEMNO, PT_RESNO,PT_NT) values ('PT'||LPAD(to_char(PointTransaction_seq.NEXTVAL), 6, '0'), 'ME000001','RS000001',100);
+Insert into PointTransaction (PT_NO, PT_MEMNO, PT_RESNO,PT_NT) values ('PT'||LPAD(to_char(PointTransaction_seq.NEXTVAL), 6, '0'), 'ME000002','RS000002',200);
+Insert into PointTransaction (PT_NO, PT_MEMNO, PT_RESNO,PT_NT) values ('PT'||LPAD(to_char(PointTransaction_seq.NEXTVAL), 6, '0'), 'ME000003','RS000003',-50);
+Insert into PointTransaction (PT_NO, PT_MEMNO, PT_RESNO,PT_NT) values ('PT'||LPAD(to_char(PointTransaction_seq.NEXTVAL), 6, '0'), 'ME000004','RS000004',-130);
+Insert into PointTransaction (PT_NO, PT_MEMNO, PT_RESNO,PT_NT) values ('PT'||LPAD(to_char(PointTransaction_seq.NEXTVAL), 6, '0'), 'ME000005','RS000005',101);
+--REFERENCES  指向 adminFunction     這個表格主鍵的欄位  (FUN_NO) 
+
+--
+--
+--
+--
+--飯局資訊表格
+CREATE TABLE FEASTINFO
+(
+    FEA_NO VARCHAR2(8) Not null,
+    FEA_RESNO VARCHAR2(8) Not null,
+    FEA_MEMNO VARCHAR2(8) Not null,
+    FEA_TITLE VARCHAR2 (100) Not null,
+    FEA_TEXT VARCHAR2(300) Not null,
+    FEA_NUMBER NUMBER (10,0) Not null,
+    FEA_UPLIM NUMBER (3, 0) Not null,
+    FEA_LOWLIM NUMBER (3, 0) Not null,
+    FEA_DATE timestamp Not null,
+    FEA_STARTDATE timestamp Not null,
+    FEA_ENDDATE timestamp,
+    FEA_TYPE VARCHAR2 (8) Not null,
+    FEA_LOC VARCHAR2 (100) Not null,
+    FEA_STATUS VARCHAR2 (10) Not null,
+    PRIMARY KEY (FEA_NO),
+    CONSTRAINT FEASTINFO_FK_FROM_RES FOREIGN KEY  (FEA_RESNO) REFERENCES RESTAURANT (RES_NO),
+    CONSTRAINT FEASTINFO_UNIQUE UNIQUE (FEA_MEMNO, FEA_DATE)
+);
+--飯局資訊序列
+CREATE SEQUENCE FEASTINFO_SEQ
+INCREMENT BY 1
+START WITH 1
+NOMAXVALUE
+NOCYCLE
+NOCACHE;
+
+INSERT INTO feastinfo (FEA_NO, FEA_RESNO, FEA_MEMNO, FEA_TITLE, FEA_TEXT, FEA_NUMBER, FEA_UPLIM, FEA_LOWLIM, FEA_DATE, FEA_STARTDATE, FEA_ENDDATE, FEA_TYPE, FEA_LOC, FEA_STATUS)
+VALUES ('FE'||LPAD(to_char(FEASTINFO_SEQ.NEXTVAL), 6, '0'), 'RS000001', 'ME000001', '熾天下燒肉', '到熾天下吃肉。', 3, 8, 4, TO_DATE('2019-06-18 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2019-06-17 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), null, '內用', '台灣桃園市中壢區中美路二段182號', 'fea1' );
+
+INSERT INTO feastinfo (FEA_NO, FEA_RESNO, FEA_MEMNO, FEA_TITLE, FEA_TEXT, FEA_NUMBER, FEA_UPLIM, FEA_LOWLIM, FEA_DATE, FEA_STARTDATE, FEA_ENDDATE, FEA_TYPE, FEA_LOC, FEA_STATUS)
+VALUES ('FE'||LPAD(to_char(FEASTINFO_SEQ.NEXTVAL), 6, '0'), 'RS000002', 'ME000002', '廣一素食', '認識更多吃素的人。', 3, 4, 2, TO_DATE('2019-06-25 12:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2019-06-23 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2019-06-23 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), '外帶', '桃園市中壢區元化路139號', 'fea2' );
+
+INSERT INTO feastinfo (FEA_NO, FEA_RESNO, FEA_MEMNO, FEA_TITLE, FEA_TEXT, FEA_NUMBER, FEA_UPLIM, FEA_LOWLIM, FEA_DATE, FEA_STARTDATE, FEA_ENDDATE, FEA_TYPE, FEA_LOC, FEA_STATUS)
+VALUES ('FE'||LPAD(to_char(FEASTINFO_SEQ.NEXTVAL), 6, '0'), 'RS000003', 'ME000003', '風太日式燒肉屋', '吃燒肉, 晚上順便約跑。', 1, 10, 8, TO_DATE('2019-08-01 12:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2019-07-15 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), null, '內用', '台灣桃園市中壢區中壢區中美路31號', 'fea5' );
+
+INSERT INTO feastinfo (FEA_NO, FEA_RESNO, FEA_MEMNO, FEA_TITLE, FEA_TEXT, FEA_NUMBER, FEA_UPLIM, FEA_LOWLIM, FEA_DATE, FEA_STARTDATE, FEA_ENDDATE, FEA_TYPE, FEA_LOC, FEA_STATUS)
+VALUES ('FE'||LPAD(to_char(FEASTINFO_SEQ.NEXTVAL), 6, '0'), 'RS000002', 'ME000004', '廣一素食', '認識更多吃素的人。', 3, 8, 4, TO_DATE('2019-06-20 12:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2019-06-17 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2019-06-19 20:00:00', 'YYYY-MM-DD HH24:MI:SS'), '外送', '桃園市中壢區元化路139號', 'fea4' );
+
+INSERT INTO feastinfo (FEA_NO, FEA_RESNO, FEA_MEMNO, FEA_TITLE, FEA_TEXT, FEA_NUMBER, FEA_UPLIM, FEA_LOWLIM, FEA_DATE, FEA_STARTDATE, FEA_ENDDATE, FEA_TYPE, FEA_LOC, FEA_STATUS)
+VALUES ('FE'||LPAD(to_char(FEASTINFO_SEQ.NEXTVAL), 6, '0'), 'RS000005', 'ME000005', '本燔壽喜燒', '最近好想吃壽喜燒。', 5, 8, 4, TO_DATE('2019-07-18 15:12:34', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2019-06-30 18:54:32', 'YYYY-MM-DD HH24:MI:SS'), null, '內用', '320桃園市中壢區五興路331巷29號', 'fea3' );
+
+
+--我的飯局表格
+CREATE TABLE MYFEAST
+(
+    MYE_FEANO VARCHAR2 (8) Not null,
+    MYE_MEMNO VARCHAR2 (8) Not null,
+    CONSTRAINT MYFEAST_PK PRIMARY KEY (MYE_FEANO, MYE_MEMNO),
+    CONSTRAINT MYFEAST_FK_FROM_FEA FOREIGN KEY  (MYE_FEANO) REFERENCES FEASTINFO (FEA_NO),
+    CONSTRAINT MYFEAST_FK_FROM_MEM FOREIGN KEY  (MYE_MEMNO) REFERENCES MEM(MEM_NO)
+);
+
+insert into MYFEAST (MYE_FEANO, MYE_MEMNO) values ('FE000001', 'ME000001');
+insert into MYFEAST (MYE_FEANO, MYE_MEMNO) values ('FE000001', 'ME000003');
+insert into MYFEAST (MYE_FEANO, MYE_MEMNO) values ('FE000001', 'ME000002');
+
+insert into MYFEAST (MYE_FEANO, MYE_MEMNO) values ('FE000002', 'ME000004');
+insert into MYFEAST (MYE_FEANO, MYE_MEMNO) values ('FE000002', 'ME000005');
+
+insert into MYFEAST (MYE_FEANO, MYE_MEMNO) values ('FE000003', 'ME000001');
+
+insert into MYFEAST (MYE_FEANO, MYE_MEMNO) values ('FE000004', 'ME000001');
+insert into MYFEAST (MYE_FEANO, MYE_MEMNO) values ('FE000004', 'ME000005');
+insert into MYFEAST (MYE_FEANO, MYE_MEMNO) values ('FE000004', 'ME000004');
+
+insert into MYFEAST (MYE_FEANO, MYE_MEMNO) values ('FE000005', 'ME000001');
+insert into MYFEAST (MYE_FEANO, MYE_MEMNO) values ('FE000005', 'ME000002');
+insert into MYFEAST (MYE_FEANO, MYE_MEMNO) values ('FE000005', 'ME000003');
+insert into MYFEAST (MYE_FEANO, MYE_MEMNO) values ('FE000005', 'ME000004');
+insert into MYFEAST (MYE_FEANO, MYE_MEMNO) values ('FE000005', 'ME000005');
+
+--飯局檢舉序列
+CREATE SEQUENCE REPORT_FEAST_SEQ
+INCREMENT BY 1
+START WITH 1
+NOMAXVALUE
+NOCYCLE
+NOCACHE;
+
+--飯局檢舉表格
+CREATE TABLE REPORT_FEAST
+(
+    REPOFEA_NO VARCHAR2 (8) Not null,
+    REPOFEA_FEANO VARCHAR2 (8) Not null,  
+    REPOFEA_MEMNO VARCHAR2 (8) Not null,
+    REPOFEA_TEXT VARCHAR2 (600) Not null, 
+    REPOFEA_STATUS VARCHAR2 (10) Not null, 
+    CONSTRAINT REPORT_FEAST_PK PRIMARY KEY (REPOFEA_NO),
+    CONSTRAINT REPORT_FEAST_FK_FROM_FEA FOREIGN KEY (REPOFEA_FEANO) REFERENCES FEASTINFO (FEA_NO),
+    CONSTRAINT REPORT_FEAST_FK_FROM_MEM FOREIGN KEY  (REPOFEA_MEMNO) REFERENCES MEM (MEM_NO)
+);
+
+INSERT INTO REPORT_FEAST (REPOFEA_NO, REPOFEA_FEANO, REPOFEA_MEMNO, REPOFEA_TEXT, REPOFEA_STATUS)
+VALUES('RF'||LPAD(to_char(REPORT_FEAST_SEQ.NEXTVAL), 6, '0'), 'FE000003', 'ME000001', '約跑好噁心。', 'repofea1');
+
+INSERT INTO REPORT_FEAST (REPOFEA_NO, REPOFEA_FEANO, REPOFEA_MEMNO, REPOFEA_TEXT, REPOFEA_STATUS)
+VALUES('RF'||LPAD(to_char(REPORT_FEAST_SEQ.NEXTVAL), 6, '0'), 'FE000003', 'ME000003', '123。', 'repofea2');
+
+INSERT INTO REPORT_FEAST (REPOFEA_NO, REPOFEA_FEANO, REPOFEA_MEMNO, REPOFEA_TEXT, REPOFEA_STATUS)
+VALUES('RF'||LPAD(to_char(REPORT_FEAST_SEQ.NEXTVAL), 6, '0'), 'FE000003', 'ME000001', '誰要跟他約跑阿', 'repofea3');
+
+
+--飯局追蹤表格
+CREATE TABLE FEASTTRACK
+(
+    TRA_FEANO VARCHAR2 (8) Not null,
+    TRA_MEMNO VARCHAR2 (8) Not null,
+    CONSTRAINT FEASTTRACK_PK PRIMARY KEY (TRA_FEANO, TRA_MEMNO),
+    CONSTRAINT FEASTTRACK_FK_FROM_FEA FOREIGN KEY  (TRA_FEANO) REFERENCES FEASTINFO (FEA_NO),
+    CONSTRAINT FEASTTRACK_FK_FROM_MEM FOREIGN KEY  (TRA_MEMNO) REFERENCES MEM (MEM_NO)
+);
+
+INSERT INTO FEASTTRACK(TRA_FEANO, TRA_MEMNO) VALUES ('FE000001', 'ME000003');
+INSERT INTO FEASTTRACK(TRA_FEANO, TRA_MEMNO) VALUES ('FE000003', 'ME000005');
+INSERT INTO FEASTTRACK(TRA_FEANO, TRA_MEMNO) VALUES ('FE000003', 'ME000004');
+INSERT INTO FEASTTRACK(TRA_FEANO, TRA_MEMNO) VALUES ('FE000002', 'ME000005');
+INSERT INTO FEASTTRACK(TRA_FEANO, TRA_MEMNO) VALUES ('FE000002', 'ME000004');
+
+--select * from all_objects where object_name='REPORT_FEAST_FK_FROM_FEA';
+
+--
+--
+--
+--
+--------------------------------------
+--貼文POST
+--------------------------------------
+CREATE TABLE POST
+(
+  POST_NO	VARCHAR2(8)  NOT NULL, 
+  POST_MEMNO	VARCHAR2(8), 
+  POST_RES_NO	VARCHAR2(8),
+  POST_TEXT	VARCHAR2(600),
+  POST_IMG	BLOB ,
+  POST_TIME	TIMESTAMP,
+  POST_RESPON	VARCHAR2(150),
+  POST_RATE	NUMBER(2,1),
+  POST_STATUS	VARCHAR2(10) NOT NULL,
+
+  CONSTRAINT post_PK PRIMARY KEY (POST_NO),
+  FOREIGN KEY (POST_MEMNO) REFERENCES mem (MEM_NO),
+ FOREIGN KEY (POST_RES_NO) REFERENCES restaurant (RES_NO)
+);  
+
+CREATE SEQUENCE post_seq
+INCREMENT BY 1
+START WITH 1
+NOMAXVALUE
+NOCYCLE
+NOCACHE;
+
+
+Insert into post
+(POST_NO,POST_MEMNO,POST_RES_NO,POST_TEXT,POST_IMG,POST_TIME,POST_RESPON,POST_RATE,POST_STATUS) values 
+('PO'||LPAD(to_char(post_seq.NEXTVAL), 6, '0'), 'ME000001' ,'RS000001' , '今天去了中大摩斯,服務還不錯,旁邊坐的女生蠻可愛的!' ,null,TO_TIMESTAMP('2019-06-10 18:00:00', 'YYYY-MM-DD HH24:MI:SS'),'感謝您的評價貼文!期許與你下次見面!',2,'post1');
+Insert into post
+(POST_NO,POST_MEMNO,POST_RES_NO,POST_TEXT,POST_IMG,POST_TIME,POST_RESPON,POST_RATE,POST_STATUS) values 
+('PO'||LPAD(to_char(post_seq.NEXTVAL), 6, '0'), 'ME000002' ,'RS000002' , '今天揪的團真的是有夠難吃的!!還一堆死宅男跟來,真是受不了他們!' ,null,TO_TIMESTAMP('2019-06-11 19:00:00', 'YYYY-MM-DD HH24:MI:SS'),'fuckOff',2,'post2');
+Insert into post
+(POST_NO,POST_MEMNO,POST_RES_NO,POST_TEXT,POST_IMG,POST_TIME,POST_RESPON,POST_RATE,POST_STATUS) values 
+('PO'||LPAD(to_char(post_seq.NEXTVAL), 6, '0'), 'ME000003' ,'RS000003' , '這家餐廳真的不錯喔!!來的飯友們也很親切!真不錯' ,null,TO_TIMESTAMP('2019-06-12 20:00:00', 'YYYY-MM-DD HH24:MI:SS'),'感謝您的評價貼文!期許與你下次見面!<3',1,'post1');
+Insert into post
+(POST_NO,POST_MEMNO,POST_RES_NO,POST_TEXT,POST_IMG,POST_TIME,POST_RESPON,POST_RATE,POST_STATUS) values 
+('PO'||LPAD(to_char(post_seq.NEXTVAL), 6, '0'), 'ME000004' ,'RS000004' , '東西蠻好吃的,但是來的飯友不能襯托出我的美,真令人失望!Orz' ,null,TO_TIMESTAMP('2019-06-09 22:00:00', 'YYYY-MM-DD HH24:MI:SS'),'感謝您的評價貼文!',1,'post1');
+Insert into post
+(POST_NO,POST_MEMNO,POST_RES_NO,POST_TEXT,POST_IMG,POST_TIME,POST_RESPON,POST_RATE,POST_STATUS) values 
+('PO'||LPAD(to_char(post_seq.NEXTVAL), 6, '0'), 'ME000005' ,'RS000005' , '這裡好像可以打文章欸欸欸欸' ,null,TO_TIMESTAMP('2019-05-12 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),'麻煩您給我們評價貼文,這樣世界會更美好喔!<2',1,'post1');
+
+
+
+
+
+
+--------------------------------------
+--留言leaveMessage
+--------------------------------------
+CREATE TABLE leaveMessage
+(
+  LM_NO    	VARCHAR2(8)  NOT NULL, 
+  LM_POSTNO	VARCHAR2(8), 
+  LM_MEMNO	VARCHAR2(8), 
+  LM_TEXT	VARCHAR2(150) NOT NULL,
+  LM_STATUS	VARCHAR2(10)  NOT NULL,
+  FOREIGN KEY (LM_POSTNO) REFERENCES POST (POST_NO),
+  FOREIGN KEY (LM_MEMNO)  REFERENCES MEM (MEM_NO),
+  CONSTRAINT leaveMessage_PK PRIMARY KEY (LM_NO)
+);
+
+CREATE SEQUENCE leaveMessage_seq
+INCREMENT BY 1
+START WITH 1
+NOMAXVALUE
+NOCYCLE
+NOCACHE;
+
+Insert into leaveMessage (LM_NO, LM_POSTNO, LM_MEMNO, LM_TEXT, LM_STATUS) 
+values ('LM'||LPAD(to_char(leaveMessage_seq.NEXTVAL), 6, '0'), 'PO000001', 'ME000001', '中大摩斯感覺真不錯!下次再一起去!','lm1');
+Insert into leaveMessage (LM_NO, LM_POSTNO, LM_MEMNO, LM_TEXT, LM_STATUS) 
+values ('LM'||LPAD(to_char(leaveMessage_seq.NEXTVAL), 6, '0'), 'PO000001', 'ME000002', '我跟你說隔壁餐廳很難吃,店員長得像含導演,令人作嘔!','lm2');
+Insert into leaveMessage (LM_NO, LM_POSTNO, LM_MEMNO, LM_TEXT, LM_STATUS)
+values ('LM'||LPAD(to_char(leaveMessage_seq.NEXTVAL), 6, '0'), 'PO000003', 'ME000003', '哈囉~能一起的參加這場飯局!我真的很開心喔~希望下次能有機會再約~<3','lm2');
+Insert into leaveMessage (LM_NO, LM_POSTNO, LM_MEMNO, LM_TEXT, LM_STATUS)
+values ('LM'||LPAD(to_char(leaveMessage_seq.NEXTVAL), 6, '0'), 'PO000004', 'ME000004', '而且店員在臉臭幾點的!送上的餐點都是冷掉的!差評差評!','lm1');
+Insert into leaveMessage (LM_NO, LM_POSTNO, LM_MEMNO, LM_TEXT, LM_STATUS)
+values ('LM'||LPAD(to_char(leaveMessage_seq.NEXTVAL), 6, '0'), 'PO000005', 'ME000005', '小姐小姐,可不可以再跟你要其他的聯絡方式?','lm1');
+
+
+
+
+--------------------------------------
+--貼文檢舉 reportPost
+--------------------------------------
+CREATE TABLE reportPost
+(
+  REPOPOST_NO		VARCHAR2(8)  NOT NULL, 
+  REPOPOST_POSTNO	VARCHAR2(8), 
+  REPOPOST_MEMNO	VARCHAR2(8), 
+  REPOPOST_TEXT		VARCHAR2(600) NOT NULL,
+  REPOPOST_STATUS	VARCHAR2(10)  NOT NULL,
+
+  FOREIGN KEY (REPOPOST_POSTNO) REFERENCES POST (POST_NO),
+  FOREIGN KEY (REPOPOST_MEMNO)  REFERENCES MEM (MEM_NO),
+  CONSTRAINT reportPost_PK PRIMARY KEY (REPOPOST_NO)
+);
+
+
+CREATE SEQUENCE reportPost_seq
+INCREMENT BY 1
+START WITH 1
+NOMAXVALUE
+NOCYCLE
+NOCACHE;
+
+Insert into reportPost (REPOPOST_NO, REPOPOST_POSTNO, REPOPOST_MEMNO, REPOPOST_TEXT, REPOPOST_STATUS) 
+values ('RP'||LPAD(to_char(reportPost_seq.NEXTVAL), 6, '0'), 'PO000001','ME000001','該貼文內文有不當文字','repopost1');
+Insert into reportPost (REPOPOST_NO, REPOPOST_POSTNO, REPOPOST_MEMNO, REPOPOST_TEXT, REPOPOST_STATUS) 
+values ('RP'||LPAD(to_char(reportPost_seq.NEXTVAL), 6, '0'), 'PO000002','ME000002','我只是想讓管理員看到我的存在!','repopost3');
+Insert into reportPost(REPOPOST_NO, REPOPOST_POSTNO, REPOPOST_MEMNO, REPOPOST_TEXT, REPOPOST_STATUS) 
+values ('RP'||LPAD(to_char(reportPost_seq.NEXTVAL), 6, '0'), 'PO000003','ME000003','po文者長相噁心,看了就討厭!','repopost1');
+Insert into reportPost(REPOPOST_NO, REPOPOST_POSTNO, REPOPOST_MEMNO, REPOPOST_TEXT, REPOPOST_STATUS) 
+values ('RP'||LPAD(to_char(reportPost_seq.NEXTVAL), 6, '0'), 'PO000004','ME000004','內文包含著仇恨字眼,請查明!','repopost1');
+Insert into reportPost(REPOPOST_NO, REPOPOST_POSTNO, REPOPOST_MEMNO, REPOPOST_TEXT, REPOPOST_STATUS) 
+values ('RP'||LPAD(to_char(reportPost_seq.NEXTVAL), 6, '0'), 'PO000005','ME000005','??????這個按鈕可以幹嘛?','repopost3');
+
+
+
+--------------------------------------
+--留言檢舉 reportLm
+--------------------------------------
+CREATE TABLE reportLm
+(
+  REPOLM_NO		VARCHAR2(8)  NOT NULL, 
+  REPOLM_LMANO		VARCHAR2(8), 
+  REPOLM_MEMNO		VARCHAR2(8), 
+  REPOLM_TEXT		VARCHAR2(600) NOT NULL,
+  REPOLM_STATUS		VARCHAR2(10)  NOT NULL,
+
+  FOREIGN KEY (REPOLM_LMANO) REFERENCES  LEAVEMESSAGE (LM_NO),
+  FOREIGN KEY (REPOLM_MEMNO)  REFERENCES MEM (MEM_NO),
+  CONSTRAINT reportLm_PK PRIMARY KEY (REPOLM_NO)
+);
+
+CREATE SEQUENCE reportLm_seq
+INCREMENT BY 1
+START WITH 1
+NOMAXVALUE
+NOCYCLE
+NOCACHE;
+
+Insert into reportLm
+(REPOLM_NO, REPOLM_LMANO, REPOLM_MEMNO, REPOLM_TEXT, REPOLM_STATUS) values ('RL'||LPAD(to_char(reportLm_seq.NEXTVAL), 6, '0'), 'LM000001','ME000001','該留言內容粗魯不雅觀','repolm3');
+Insert into reportLm
+(REPOLM_NO, REPOLM_LMANO, REPOLM_MEMNO, REPOLM_TEXT, REPOLM_STATUS) values ('RL'||LPAD(to_char(reportLm_seq.NEXTVAL), 6, '0'), 'LM000002','ME000002','留言者長相可愛,想認識!!!求++','repolm1');
+Insert into reportLm
+(REPOLM_NO, REPOLM_LMANO, REPOLM_MEMNO, REPOLM_TEXT, REPOLM_STATUS) values ('RL'||LPAD(to_char(reportLm_seq.NEXTVAL), 6, '0'), 'LM000003','ME000003','該留言內容粗魯不雅觀','repolm3');
+Insert into reportLm
+(REPOLM_NO, REPOLM_LMANO, REPOLM_MEMNO, REPOLM_TEXT, REPOLM_STATUS) values ('RL'||LPAD(to_char(reportLm_seq.NEXTVAL), 6, '0'), 'LM000004','ME000004','我只是想讓管理員看到我喔!安安','repolm2');
+Insert into reportLm
+(REPOLM_NO, REPOLM_LMANO, REPOLM_MEMNO, REPOLM_TEXT, REPOLM_STATUS) values ('RL'||LPAD(to_char(reportLm_seq.NEXTVAL), 6, '0'), 'LM000005','ME000005','大家好!我想要找朋友!','repolm3');
+
+--
+--
+--
+--
+----------------------------------------------------------------
+-- for Table ORD
+----------------------------------------------------------------
+CREATE TABLE ORD(
+    ORD_NO	VARCHAR2(15)	Not null ,
+ORD_FEA_NO	VARCHAR2(8)	Not null ,
+ORD_MEMNO	VARCHAR2(8)	,
+ORD_RESNO	VARCHAR2(8)	,
+ORD_PRICE	NUMBER(10,0)	Not null,
+ORD_DATE	timestamp,
+ORD_STATUS	VARCHAR2(10)	Not null,
+ORD_TYPE	VARCHAR2(10)	Not null,
+CONSTRAINT ORD_PK PRIMARY KEY (ORD_NO),
+CONSTRAINT ORD_FK1 FOREIGN KEY (ORD_FEA_NO)REFERENCES FEASTINFO (FEA_NO),
+CONSTRAINT ORD_FK2 FOREIGN KEY (ORD_MEMNO) REFERENCES MEM (MEM_NO),
+CONSTRAINT ORD_FK3 FOREIGN KEY (ORD_RESNO) REFERENCES RESTAURANT(RES_NO)
+);
+
+CREATE SEQUENCE ord_seq
+INCREMENT BY 1
+START WITH 1
+NOMAXVALUE
+NOCYCLE
+NOCACHE;
+
+INSERT INTO ORD (ORD_NO,ORD_FEA_NO,ORD_MEMNO,ORD_RESNO,ORD_PRICE,ORD_DATE,ORD_STATUS,ORD_TYPE)
+VALUES (to_char(sysdate,'yyyymmdd')||'-'||LPAD(to_char(ord_seq.NEXTVAL), 6, '0'),'FE000001','ME000001','RS000001',699,sysdate,'ords1','ordt3');
+
+INSERT INTO ORD (ORD_NO,ORD_FEA_NO,ORD_MEMNO,ORD_RESNO,ORD_PRICE,ORD_DATE,ORD_STATUS,ORD_TYPE)
+VALUES (to_char(sysdate,'yyyymmdd')||'-'||LPAD(to_char(ord_seq.NEXTVAL), 6, '0'),'FE000002','ME000002','RS000002',200,sysdate,'ords2','ordt2');
+
+INSERT INTO ORD (ORD_NO,ORD_FEA_NO,ORD_MEMNO,ORD_RESNO,ORD_PRICE,ORD_DATE,ORD_STATUS,ORD_TYPE)
+VALUES (to_char(sysdate,'yyyymmdd')||'-'||LPAD(to_char(ord_seq.NEXTVAL), 6, '0'),'FE000003','ME000003','RS000003',300,sysdate,'ords3','ordt1');
+
+INSERT INTO ORD (ORD_NO,ORD_FEA_NO,ORD_MEMNO,ORD_RESNO,ORD_PRICE,ORD_DATE,ORD_STATUS,ORD_TYPE)
+VALUES (to_char(sysdate,'yyyymmdd')||'-'||LPAD(to_char(ord_seq.NEXTVAL), 6, '0'),'FE000004','ME000004','RS000004',599,sysdate,'ords4','ordt1');
+
+INSERT INTO ORD (ORD_NO,ORD_FEA_NO,ORD_MEMNO,ORD_RESNO,ORD_PRICE,ORD_DATE,ORD_STATUS,ORD_TYPE)
+VALUES (to_char(sysdate,'yyyymmdd')||'-'||LPAD(to_char(ord_seq.NEXTVAL), 6, '0'),'FE000005','ME000005','RS000005',900,sysdate,'ords5','ordt2');
+----------------------------------------------------------------
+-- for Table ORD_DETAILS
+----------------------------------------------------------------
+CREATE TABLE ORD_DETAILS(
+DET_ORDNO	VARCHAR2	(15)Not null,
+DET_FONO	VARCHAR2	(8)	Not null,
+DET_PRICE	NUMBER	(10,0)	Not null,
+DET_QUANTITY	NUMBER	(10,0)	Not null,
+CONSTRAINT ORD_DETAILS_PK  PRIMARY KEY(DET_ORDNO,DET_FONO),
+CONSTRAINT ORD_DETAILS_FK1 FOREIGN KEY(DET_FONO)  REFERENCES FOODITEM(FO_NO),
+CONSTRAINT ORD_DETAILS_FK2 FOREIGN KEY(DET_ORDNO) REFERENCES ORD (ORD_NO)
+);
+
+INSERT INTO ORD_DETAILS (DET_ORDNO,DET_FONO,DET_PRICE,DET_QUANTITY)
+VALUES (to_char(sysdate,'yyyymmdd')||'-'||LPAD(to_char(ord_seq.CURRVAL), 6, '0'),'FO000001',100,2);
+
+INSERT INTO ORD_DETAILS (DET_ORDNO,DET_FONO,DET_PRICE,DET_QUANTITY)
+VALUES (to_char(sysdate,'yyyymmdd')||'-'||LPAD(to_char(ord_seq.CURRVAL), 6, '0'),'FO000002',200,1);
+
+INSERT INTO ORD_DETAILS (DET_ORDNO,DET_FONO,DET_PRICE,DET_QUANTITY)
+VALUES (to_char(sysdate,'yyyymmdd')||'-'||LPAD(to_char(ord_seq.CURRVAL), 6, '0'),'FO000003',300,1);
+
+INSERT INTO ORD_DETAILS (DET_ORDNO,DET_FONO,DET_PRICE,DET_QUANTITY)
+VALUES (to_char(sysdate,'yyyymmdd')||'-'||LPAD(to_char(ord_seq.CURRVAL), 6, '0'),'FO000004',100,1);
+
+INSERT INTO ORD_DETAILS (DET_ORDNO,DET_FONO,DET_PRICE,DET_QUANTITY)
+VALUES (to_char(sysdate,'yyyymmdd')||'-'||LPAD(to_char(ord_seq.CURRVAL), 6, '0'),'FO000005',100,1);
+--
+--
+--
+--
+--訊息
+CREATE TABLE MESSAGE 
+(
+  MESSAGE_NO     VARCHAR2(8)  NOT NULL, 
+  MESSAGE_FEANO  VARCHAR2(8), 
+  MESSAGE_MEMNO  VARCHAR2(8),
+  MESSAGE_TEST   CLOB,
+  MESSAGE_TIME   DATE,
+  
+  CONSTRAINT MESSAGE_PK PRIMARY KEY (MESSAGE_NO),
+  CONSTRAINT MESSAGE_FK_FROM_FEASTINFO FOREIGN KEY  (MESSAGE_FEANO) REFERENCES FEASTINFO(FEA_NO),
+  CONSTRAINT MESSAGE_FK_FROM_MEM       FOREIGN KEY  (MESSAGE_MEMNO) REFERENCES MEM(MEM_NO)
+);
+
+CREATE SEQUENCE MESSAGE_seq
+INCREMENT BY 1
+START WITH 1
+NOMAXVALUE
+NOCYCLE
+NOCACHE;
+
+insert into MESSAGE(MESSAGE_NO,MESSAGE_FEANO,MESSAGE_MEMNO,MESSAGE_TEST,MESSAGE_TIME) values ('MS'||LPAD(to_char(MESSAGE_seq.NEXTVAL),6, '0'),'FE000001','ME000001','測試字串01',TO_DATE('2019-06-18 12:00:00', 'YYYY-MM-DD HH24:MI:SS'));
+insert into MESSAGE(MESSAGE_NO,MESSAGE_FEANO,MESSAGE_MEMNO,MESSAGE_TEST,MESSAGE_TIME) values ('MS'||LPAD(to_char(MESSAGE_seq.NEXTVAL),6, '0'),'FE000001','ME000002','測試字串02',TO_DATE('2019-06-18 17:00:00', 'YYYY-MM-DD HH24:MI:SS'));
+insert into MESSAGE(MESSAGE_NO,MESSAGE_FEANO,MESSAGE_MEMNO,MESSAGE_TEST,MESSAGE_TIME) values ('MS'||LPAD(to_char(MESSAGE_seq.NEXTVAL),6, '0'),'FE000001','ME000003','測試字串03',TO_DATE('2019-06-18 19:00:00', 'YYYY-MM-DD HH24:MI:SS'));
+
+CREATE TABLE FRIENDLIST 
+(
+  F_NO     VARCHAR2(8)  NOT NULL, 
+  F_MEMNO  VARCHAR2(8)  NOT NULL, 
+  F_STATUS VARCHAR2(10) NOT NULL,
+  
+  CONSTRAINT FRIENDLIST_PK PRIMARY KEY (F_NO,F_MEMNO),
+  CONSTRAINT FRIENDLIST_FK_FROM_MEM1 FOREIGN KEY  (F_NO) REFERENCES MEM (MEM_NO),
+  CONSTRAINT FRIENDLIST_FK_FROM_MEM2 FOREIGN KEY  (F_MEMNO) REFERENCES MEM (MEM_NO)
+);
+
+
+insert into FRIENDLIST(F_NO,F_MEMNO,F_STATUS) values('ME000001','ME000002','f1');
+insert into FRIENDLIST(F_NO,F_MEMNO,F_STATUS) values('ME000001','ME000003','f2');
+insert into FRIENDLIST(F_NO,F_MEMNO,F_STATUS) values('ME000001','ME000004','f2');
+--
+--
+--
+--
+
+CREATE TABLE administrator 
+(
+  ADMIN_NO     VARCHAR2(8)  NOT NULL, 
+  ADMIN_AC  VARCHAR2(20)  NOT NULL UNIQUE, 
+  ADMIN_PASS VARCHAR2(20) NOT NULL, 
+  ADMIN_NAME VARCHAR2(60) NOT NULL, 
+  CONSTRAINT admin_PK PRIMARY KEY (ADMIN_NO)
+);
+  
+CREATE SEQUENCE admin_seq
+INCREMENT BY 1
+START WITH 1
+NOMAXVALUE
+NOCYCLE
+NOCACHE;
+--建假資料
+
+Insert into administrator (ADMIN_NO, ADMIN_AC, ADMIN_PASS, ADMIN_NAME) values ('AM'||LPAD(to_char(admin_seq.NEXTVAL), 6, '0'), 'KAI123456', '123456','湯姆');
+Insert into administrator (ADMIN_NO, ADMIN_AC, ADMIN_PASS, ADMIN_NAME) values ('AM'||LPAD(to_char(admin_seq.NEXTVAL), 6, '0'), 'KAI654321', '456789','傑力');
+CREATE TABLE adminFunction 
+(
+  FUN_NO    VARCHAR2(8)  NOT NULL, 
+  FUN_NAME  VARCHAR2(60), 
+  FUN_DES VARCHAR2(150), 
+  CONSTRAINT FUN_PK PRIMARY KEY (FUN_NO)
+);
+CREATE SEQUENCE adminFunction_seq
+INCREMENT BY 1
+START WITH 1
+NOMAXVALUE
+NOCYCLE
+NOCACHE;
+ Insert into adminFunction  (FUN_NO, FUN_NAME, FUN_DES) values ('FU'||LPAD(to_char(adminFunction_seq.NEXTVAL), 6, '0'), '飯局檢舉審查', '審查飯局的檢舉是否屬實');
+  Insert into adminFunction  (FUN_NO, FUN_NAME, FUN_DES) values ('FU'||LPAD(to_char(adminFunction_seq.NEXTVAL), 6, '0'), '貼文/回覆檢舉審查', '審查貼文/回覆的檢舉是否屬實');
+  Insert into adminFunction  (FUN_NO, FUN_NAME, FUN_DES) values ('FU'||LPAD(to_char(adminFunction_seq.NEXTVAL), 6, '0'), '一般會員管理', '管理會員狀態');
+  Insert into adminFunction  (FUN_NO, FUN_NAME, FUN_DES) values ('FU'||LPAD(to_char(adminFunction_seq.NEXTVAL), 6, '0'), '會員點數交易紀錄查詢', '管理會員點數交易紀錄查詢');
+  Insert into adminFunction  (FUN_NO, FUN_NAME, FUN_DES) values ('FU'||LPAD(to_char(adminFunction_seq.NEXTVAL), 6, '0'), '點數提領審核', '審核點數提領');
+  Insert into adminFunction  (FUN_NO, FUN_NAME, FUN_DES) values ('FU'||LPAD(to_char(adminFunction_seq.NEXTVAL), 6, '0'), '商品異動審核', '審核商品異動');
+  Insert into adminFunction  (FUN_NO, FUN_NAME, FUN_DES) values ('FU'||LPAD(to_char(adminFunction_seq.NEXTVAL), 6, '0'), '店家帳號審核', '審核店家帳號');
+  Insert into adminFunction  (FUN_NO, FUN_NAME, FUN_DES) values ('FU'||LPAD(to_char(adminFunction_seq.NEXTVAL), 6, '0'), '店家管理', '管理店家狀態');
+  Insert into adminFunction  (FUN_NO, FUN_NAME, FUN_DES) values ('FU'||LPAD(to_char(adminFunction_seq.NEXTVAL), 6, '0'), '廣告審查', '審查廣告內容是否恰當');
+  Insert into adminFunction  (FUN_NO, FUN_NAME, FUN_DES) values ('FU'||LPAD(to_char(adminFunction_seq.NEXTVAL), 6, '0'), '飯局資訊管理', '管理飯局資訊');
+  Insert into adminFunction  (FUN_NO, FUN_NAME, FUN_DES) values ('FU'||LPAD(to_char(adminFunction_seq.NEXTVAL), 6, '0'), '管理者帳號管理', '管理管理者帳號');
+  
+  CREATE TABLE adminPower 
+  (
+      ADMINPOW_ADMINNO    VARCHAR2(8)  NOT NULL, 
+      ADMINPOW_FUNNO  VARCHAR2(8)  NOT NULL, 
+      PRIMARY KEY (ADMINPOW_ADMINNO,ADMINPOW_FUNNO),
+      FOREIGN KEY (ADMINPOW_ADMINNO) REFERENCES administrator (ADMIN_NO),
+      FOREIGN KEY (ADMINPOW_FUNNO) REFERENCES adminFunction (FUN_NO)
+);
+
+insert into adminPower (ADMINPOW_ADMINNO,ADMINPOW_FUNNO) values ('AM000001','FU000002'); 
+insert into adminPower (ADMINPOW_ADMINNO,ADMINPOW_FUNNO) values ('AM000001','FU000003'); 
+insert into adminPower (ADMINPOW_ADMINNO,ADMINPOW_FUNNO) values ('AM000001','FU000004'); 
+insert into adminPower (ADMINPOW_ADMINNO,ADMINPOW_FUNNO) values ('AM000001','FU000005'); 
+insert into adminPower (ADMINPOW_ADMINNO,ADMINPOW_FUNNO) values ('AM000001','FU000006'); 
+insert into adminPower (ADMINPOW_ADMINNO,ADMINPOW_FUNNO) values ('AM000001','FU000007'); 
+insert into adminPower (ADMINPOW_ADMINNO,ADMINPOW_FUNNO) values ('AM000001','FU000008'); 
+insert into adminPower (ADMINPOW_ADMINNO,ADMINPOW_FUNNO) values ('AM000001','FU000009'); 
+insert into adminPower (ADMINPOW_ADMINNO,ADMINPOW_FUNNO) values ('AM000001','FU000010'); 
+insert into adminPower (ADMINPOW_ADMINNO,ADMINPOW_FUNNO) values ('AM000001','FU000011'); 
+--
+insert into adminPower (ADMINPOW_ADMINNO,ADMINPOW_FUNNO) values ('AM000002','FU000011'); 
+
+commit;
